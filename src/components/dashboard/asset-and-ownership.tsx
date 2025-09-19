@@ -3,7 +3,6 @@ import { Asset, Ownership, ProposalResult } from "../../types/rwa";
 import { NotificationContext } from "../../context/NotificationContext";
 import { LoaderComponent } from "../LoaderComponent";
 import { backendService } from "../../services/backendService";
-import { backend } from "../../../../declarations/backend";
 import { formatMotokoTime, getAssetStatusText } from "../../helper/rwa-helper";
 import { ModalContext, ModalKindEnum } from "../../context/ModalContext";
 
@@ -209,7 +208,7 @@ export function AssetAndOwnerDashboard() {
             try {
                 const myassetData = await backendService.getMyAssets();
                 setMyasset(myassetData);
-                const myownershipData = await backend.getMyOwnerShip();
+                const myownershipData = await backendService.getMyOwnerships();
                 setMyownership(myownershipData);
             } catch (error) {
                 setNotificationData({
