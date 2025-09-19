@@ -4,6 +4,12 @@ import { getAssetStatusText } from "../../helper/rwa-helper";
 import React from "react";
 import { ModalContext, ModalKindEnum } from "../../context/ModalContext";
 
+export interface AssetMainInfoProps {
+    assetData: Asset;
+    onProposeToBuy?: () => void;
+    onAIChecker?: () => Promise<string>;
+}
+
 export function AssetNavigation({ assetname }: { assetname: string }) {
     return (
         <div className="space-x-2 text-gray-500">
@@ -35,7 +41,7 @@ export function AssetGallery() {
 }
 
 export function AssetMainInfo(
-    { assetData }: { assetData: Asset }
+    {assetData ,onProposeToBuy, onAIChecker}: AssetMainInfoProps
 ) {
     const { setModalKind } = React.useContext(ModalContext);
     return (
@@ -58,13 +64,13 @@ export function AssetMainInfo(
             </div>
             <div className="py-4 space-y-2">
                 <button
-                    onClick={() => setModalKind(ModalKindEnum.proposedbuytoken)}
+                    onClick={() => {setModalKind(ModalKindEnum.proposedbuytoken); onProposeToBuy && onProposeToBuy()}}
                     className="flex items-center space-x-3 text-white background-dark p-2 w-full justify-center"
                 >
                     <ShoppingCart />
                     <p>Proposed to Buy</p>
                 </button>
-                <button className="flex items-center space-x-3 p-2 w-full justify-center border border-gray-300">
+                <button onClick={onAIChecker} className="flex items-center space-x-3 p-2 w-full justify-center border border-gray-300">
                     <Bot color="gray" />
                     <p className="text-gray-700">AI Examiner</p>
                 </button>
