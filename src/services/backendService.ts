@@ -534,5 +534,15 @@ export const backendService = {
         }
     },
 
+     async getIncome(): Promise<[Transaction[]] | []> {
+        try {
+            const actor = await getActor();
+            const res = await actor.getIncome("assetId");
+            return res;
+        } catch (error) {
+            throw (error);
+        }
+    }
+
 
 };
