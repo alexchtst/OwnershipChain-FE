@@ -44,7 +44,7 @@ export function AssetMainInfo(
     {assetData ,onProposeToBuy, onAIChecker}: AssetMainInfoProps
 ) {
     const { setModalKind } = React.useContext(ModalContext);
-    const { summary, setSummary } = React.useState<string>("");
+    const [ summary, setSummary ] = React.useState<string>("");
     return (
         <div className="w-full rounded-md border border-gray-300 p-5">
             <h1 className="text-4xl pb-2">{assetData.name}</h1>
@@ -71,7 +71,7 @@ export function AssetMainInfo(
                     <ShoppingCart />
                     <p>Proposed to Buy</p>
                 </button>
-                <button onClick={() => {setSummary(onAIChecker)}} className="flex items-center space-x-3 p-2 w-full justify-center border border-gray-300">
+                <button onClick={async () => {if (onAIChecker) { const result = await onAIChecker(); setSummary(result); }}} className="flex items-center space-x-3 p-2 w-full justify-center border border-gray-300">
                     <Bot color="gray" />
                     <p className="text-gray-700">AI Examiner</p>
                 </button>
