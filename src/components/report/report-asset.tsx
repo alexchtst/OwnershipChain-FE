@@ -60,6 +60,7 @@ export default function AssetReportFlow() {
     const [assetDocHash, setAssetDocHash] = React.useState("")
     const [reportType, setReportType] = React.useState("Legality");
     const [evidence, setEvidence] = React.useState<[TypeReportEvidence] | []>([])
+    const [summary, setSummary] = React.useState("")
 
     async function handleSetAsset() {
         setIsloading(true);
@@ -187,6 +188,31 @@ export default function AssetReportFlow() {
             })
         }
     }
+
+    const onAIChecker = async (): Promise<void> => {
+        console.log("AI Checker");
+        try {
+          const response = await fetch('https://llm.asoatram.my.id/summarize', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              user_prompt: "Give me a summary.",
+              asset: {
+                name: retrievedAsset ? retrievedAsset.name : "",
+                description: retrievedAsset ? retrievedAsset.description : "",
+                riskScore: retrievedAsset ? retrievedAsset.riskScore : 0,
+              },
+            }),
+          });
+          const result = await response.json();
+          console.log('Success:', result.response);
+          setSummary(result.response);
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      };
 
     return (
         <div className="space-y-8">
@@ -367,6 +393,7 @@ export default function AssetReportFlow() {
                     <div className="p-4 space-y-3">
                         {/* Run AI Analysis button */}
                         <button
+                            onClick={onAIChecker}
                             type="button"
                             className="w-full py-3 bg-[#0d1321] text-white font-medium rounded-md flex items-center justify-center space-x-2 hover:bg-[#1a2235]"
                         >
@@ -393,7 +420,7 @@ export default function AssetReportFlow() {
                             <div>
                                 <p className="font-medium">Analysis will take 2-3 minutes</p>
                                 <p className="text-gray-500">
-                                    AI will examine metadata, visual similarity, and blockchain history
+                                    {summary ? summary : "AI will examine metadata, visual similarity, and blockchain history"}
                                 </p>
                             </div>
                         </div>
