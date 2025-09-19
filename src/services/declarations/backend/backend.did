@@ -1,0 +1,264 @@
+type UserOverviewResult = 
+ record {
+   asset: record {
+            token: int;
+            total: int;
+          };
+   ownership: record {
+                token: int;
+                total: int;
+              };
+   transaction:
+    record {
+      buy: int;
+      dividend: int;
+      sell: int;
+      total: int;
+      transfer: int;
+    };
+   userIdentity: User;
+ };
+type UserKyc = 
+ record {
+   riskScore: nat;
+   status: KycStatus;
+ };
+type User = 
+ record {
+   city: text;
+   country: text;
+   fullName: text;
+   id: text;
+   kyc_level: UserKyc;
+   lastName: text;
+   phone: text;
+   publickey: text;
+   timeStamp: int;
+   userIDNumber: text;
+   userIdentity: IdentityNumberType;
+ };
+type TypeReportEvidence = 
+ record {
+   evidencecontent: opt text;
+   footPrintFlow: opt int;
+   hashclarity: opt text;
+ };
+type TransactionType = 
+ variant {
+   Buy;
+   Dividend;
+   Downpayment;
+   DownpaymentCashBack;
+   Extending;
+   Redeem;
+   Sell;
+   Transfer;
+ };
+type TransactionStatus = 
+ variant {
+   Completed;
+   Failed;
+   Pending;
+ };
+type Transaction = 
+ record {
+   assetId: text;
+   details: opt text;
+   from: principal;
+   id: text;
+   pricePerToken: nat;
+   timestamp: int;
+   to: principal;
+   totalPrice: nat;
+   totalPurchasedToken: nat;
+   transactionStatus: TransactionStatus;
+   transactionType: TransactionType;
+ };
+type Rule = 
+ record {
+   details: vec text;
+   downPaymentCashback: float64;
+   downPaymentMaturityTime: nat;
+   minDownPaymentPercentage: float64;
+   needDownPayment: bool;
+   ownerShipMaturityTime: int;
+   paymentMaturityTime: int;
+   sellSharing: bool;
+   sellSharingNeedVote: bool;
+   sellSharingPrice: nat;
+ };
+type Result = 
+ variant {
+   err: text;
+   ok: text;
+ };
+type ReportType = 
+ variant {
+   Bankrupting;
+   Fraud;
+   Legality;
+   Plagiarism;
+   Scam;
+ };
+type Report = 
+ record {
+   complainer: principal;
+   content: text;
+   created: int;
+   description: text;
+   evidence: opt TypeReportEvidence;
+   id: text;
+   isDone: int;
+   isDoneTimeStamp: int;
+   reportType: ReportType;
+   reputation: nat;
+   targetid: text;
+ };
+type ProposalResult = 
+ record {
+   amount: nat;
+   assetId: text;
+   createdAt: int;
+   downPaymentStatus: bool;
+   downPaymentTimeStamp: int;
+   id: text;
+   pricePerToken: nat;
+   totalPrice: nat;
+   voterPercentage: float64;
+ };
+type Ownership = 
+ record {
+   id: text;
+   maturityDate: int;
+   owner: principal;
+   percentage: float64;
+   purchaseDate: int;
+   purchasePrice: nat;
+   tokenOwned: nat;
+ };
+type LocationType = 
+ record {
+   details: vec text;
+   lat: float64;
+   long: float64;
+ };
+type KycStatus = 
+ variant {
+   Pending;
+   Rejected;
+   Verivied;
+ };
+type IdentityNumberType = 
+ variant {
+   IdentityNumber;
+   LiscenseNumber;
+   Pasport;
+ };
+type DocumentHash = 
+ record {
+   description: text;
+   hash: text;
+   name: text;
+ };
+type AssetType = 
+ variant {
+   Artwork;
+   Business;
+   Equipment;
+   Property;
+   Vehicle;
+ };
+type AssetStatus = 
+ variant {
+   Active;
+   Inactive;
+   Open;
+   Pending;
+ };
+type AssetSponsorship = 
+ record {
+   assetid: text;
+   content: text;
+   timestamp: int;
+   trustGuatantee: nat;
+ };
+type AssetGuarantee = 
+ record {
+   amount: nat;
+   assetid: text;
+   content: text;
+   timestamp: int;
+ };
+type Asset = 
+ record {
+   assetStatus: AssetStatus;
+   assetType: AssetType;
+   createdAt: int;
+   creator: principal;
+   description: text;
+   documentHash: vec DocumentHash;
+   id: text;
+   locationInfo: LocationType;
+   maxTokenPurchased: nat;
+   minTokenPurchased: nat;
+   name: text;
+   pendingToken: nat;
+   pricePerToken: nat;
+   providedToken: nat;
+   riskScore: float64;
+   rule: Rule;
+   tokenLeft: nat;
+   totalToken: nat;
+   updatedAt: int;
+ };
+service : {
+  actionReport: (text, text, opt text, opt text) -> (Result);
+  addNewSponsor: (text, text, nat) -> (Result);
+  approveBuyProposal: (text) -> (Result);
+  approveInvestorProposal: (text) -> (Result);
+  askAI: (text) -> (text);
+  changeAssetStatus: (text, AssetStatus) -> (Result);
+  claimAssetSupport: (text) -> (Result);
+  createAsset: (text, text, nat, nat, nat, nat, nat, LocationType,
+   vec DocumentHash, AssetType, AssetStatus, Rule) -> (Result);
+  createAssetGuarantee: (text, text, nat) -> (Result);
+  createIvestorProposal: (text, principal, nat, nat) -> (Result);
+  createReportAsset: (text, text, text, opt TypeReportEvidence,
+   ReportType) -> (Result);
+  distributeDividend: (text, nat) -> (Result);
+  finishTheInvitation: (text, nat) -> (Result);
+  finishedPayment: (text, int) -> (Result);
+  getAllAssetGuarantees: () -> (vec AssetGuarantee);
+  getAllAssets: () -> (vec Asset);
+  getAllSponsor: () -> (vec AssetSponsorship);
+  getAssetById: (text) -> (opt Asset);
+  getAssetFullDetails: (text) ->
+   (opt
+     record {
+       asset: Asset;
+       dividends: vec Transaction;
+       ownerships: vec Ownership;
+       transactions: vec Transaction;
+     });
+  getAssetGuarantee: (text) -> (opt AssetGuarantee);
+  getAssetSignature: (text) -> (opt vec DocumentHash);
+  getAssetTotalCount: () -> (nat);
+  getAssetbyRange: (nat, nat) -> (vec Asset);
+  getIncome: (text) -> (opt vec Transaction);
+  getMyAssetReport: () -> (vec Report);
+  getMyAssets: () -> (vec Asset);
+  getMyOwnerShip: () -> (vec Ownership);
+  getMyProfiles: () -> (opt UserOverviewResult);
+  getMyProposal: () -> (opt vec ProposalResult);
+  getProposalbyAssetId: (text) -> (opt vec ProposalResult);
+  getReportById: (text) -> (vec Report);
+  getSponsorsByAssetId: (text) -> (vec AssetSponsorship);
+  getUserPublicKey: (principal) -> (opt text);
+  getUserPublicSignature: () -> (opt text);
+  initializeNewAssetSponsor: (text, text, nat) -> (Result);
+  proceedDownPayment: (nat, text) -> (Result);
+  proposedBuyToken: (text, nat, nat) -> (Result);
+  registUser: (text, text, text, text, text, text, IdentityNumberType,
+   text) -> (Result);
+  seacrhAsset: (text, opt AssetStatus) -> (opt Asset);
+}
