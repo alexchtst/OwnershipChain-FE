@@ -55,7 +55,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setPrincipal(identity.getPrincipal().toString());
 
         // Get canister ID with fallback
-        const canisterId = backend_id || import.meta.env.VITE_CANISTER_ID_BACKEND || "engfj-myaaa-aaaac-qaita-cai";
+        const canisterId = backend_id || import.meta.env.VITE_CANISTER_ID_BACKEND || "23all-uiaaa-aaaac-qb3ma-cai";
         
         if (!canisterId) {
             console.error("❌ No canister ID found!");
