@@ -5,7 +5,7 @@ import { unwrapResult } from "../helper/rwa-helper.js";
 import { Principal } from "@dfinity/principal";
 
 // Updated environment variable names and fallback values
-const BACKEND_CANISTER_ID = import.meta.env.VITE_CANISTER_ID_BACKEND || "engfj-myaaa-aaaac-qaita-cai";
+const BACKEND_CANISTER_ID = import.meta.env.VITE_CANISTER_ID_BACKEND || "23all-uiaaa-aaaac-qb3ma-cai";
 const IC_HOST = import.meta.env.VITE_IC_HOST || "https://icp-api.io";
 
 let currentActor: any = null;
