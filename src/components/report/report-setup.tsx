@@ -43,7 +43,7 @@ export function ReportOptions(
             </div>
             <div
                 onClick={() => handleSetOpt(ReportEnum.user)}
-                className={`cursor-pointer border ${reportOpt === ReportEnum.user ? 'bg-gray-200' : 'hover:bg-gray-100'} p-3 rounded-md border-gray-200 space-y-2`}
+                className={`cursor-pointer border ${reportOpt === ReportEnum.user ? 'bg-gray-200' : 'hover:bg-gray-100'} p-3 rounded-md border-gray-200 space-y-2 hidden`}
             >
                 <div className="space-x-2 flex items-center text-gray-700 text-sm">
                     <UserX size={18} />
