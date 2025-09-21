@@ -38,7 +38,7 @@ export function NavigationDashboard(
                     className={`cursor-pointer p-1 border-b ${dashboardOpt === DashboardOption.income
                         ? "border-black text-black"
                         : "border-transparent hover:text-black hover:border-black" // tidak aktif → transparan, muncul saat hover
-                        }`}
+                        } hidden`}
                 >
                     Income
                 </div>
